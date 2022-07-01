@@ -1,7 +1,7 @@
 {
   "name": "YouLikedIt",
   "description": "Automatically LIKE every video you watch.",
-  "version": "0.1",
+  "version": "0.2",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
@@ -11,8 +11,7 @@
     "tabs"
   ],
   "host_permissions": [
-    "http://*/",
-    "https://*/"
+    "https://www.youtube.com/watch?v=*/"
   ],
   "action": {
     "default_icon": "you_liked_it.png"
