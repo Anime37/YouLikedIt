@@ -3,7 +3,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         setTimeout(() => {
             chrome.scripting.executeScript({
                 target: { tabId: tabId },
-                files: ['content.js']
+                files: ['js/content.js']
             });
         }, 3000);
     }

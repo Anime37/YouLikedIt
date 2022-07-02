@@ -1,0 +1,10 @@
+build:
+  stage: build
+  script: echo "Zipping up files..."
+  artifacts:
+    name: "you_like_it"
+    paths:
+      - js
+      - manifest.json
+      - you_liked_it.png
+    expire_in: 30 days
