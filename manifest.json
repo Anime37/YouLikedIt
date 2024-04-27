@@ -17,6 +17,9 @@
             ],
             "js": [
                 "js/content.js"
+            ],
+            "css": [
+                "styles.css"
             ]
         }
     ],

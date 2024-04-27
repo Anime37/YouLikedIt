@@ -1,11 +1,28 @@
+function createNotification(message, color) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.style.backgroundColor = color
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    // Fade away after 3 seconds
+    setTimeout(function () {
+        notification.style.opacity = 0;
+        setTimeout(function () {
+            notification.remove();
+        }, 1000); // Fade out duration
+    }, 3000); // Display duration
+}
+
 function clickLike(like_button) {
     if (like_button.title !== 'I like this') {
         console.log('already liked');
+        createNotification('ALREADY LIKED', '#cc0000');
         return;
     }
     console.log('clicking like click');
-    console.log(like_button.title);
     like_button.click();
+    createNotification('LIKED', '#33cc33');
 }
 
 // Define the mutation handler function
