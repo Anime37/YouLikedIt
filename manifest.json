@@ -1,19 +1,29 @@
 {
-  "name": "YouLikedIt",
-  "description": "Automatically LIKE every video you watch.",
-  "version": "0.3",
-  "manifest_version": 3,
-  "background": {
-    "service_worker": "js/background.js"
-  },
-  "permissions": [
-    "scripting",
-    "tabs"
-  ],
-  "host_permissions": [
-    "https://www.youtube.com/watch?v=*/"
-  ],
-  "action": {
-    "default_icon": "you_liked_it.png"
-  }
+    "name": "YouLikedIt",
+    "description": "Automatically LIKE every video you watch.",
+    "version": "0.3",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "js/background.js"
+    },
+    "permissions": [
+        "scripting",
+        "tabs"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "*://www.youtube.com/watch?v=*"
+            ],
+            "exclude_globs": [
+                "*://www.youtube.com/watch*list=*"
+            ],
+            "js": [
+                "js/content.js"
+            ]
+        }
+    ],
+    "action": {
+        "default_icon": "icon.png"
+    }
 }
