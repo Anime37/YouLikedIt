@@ -3,9 +3,6 @@
     "description": "Automatically LIKE every video you watch.",
     "version": "0.3",
     "manifest_version": 3,
-    "background": {
-        "service_worker": "js/background.js"
-    },
     "permissions": [
         "scripting",
         "tabs"
