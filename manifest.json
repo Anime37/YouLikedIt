@@ -1,7 +1,7 @@
 {
     "name": "YouLikedIt",
     "description": "Automatically LIKE every video you watch.",
-    "version": "0.4",
+    "version": "0.5",
     "manifest_version": 3,
     "permissions": [
         "scripting",
@@ -10,7 +10,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://www.youtube.com/watch?v=*"
+                "*://www.youtube.com/*"
             ],
             "exclude_globs": [
                 "*://www.youtube.com/watch*list=*"
