@@ -3,10 +3,6 @@
     "description": "Automatically LIKE every video you watch.",
     "version": "0.5",
     "manifest_version": 3,
-    "permissions": [
-        "scripting",
-        "tabs"
-    ],
     "content_scripts": [
         {
             "matches": [
