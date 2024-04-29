@@ -4,7 +4,8 @@ build:
   artifacts:
     name: "you_like_it"
     paths:
+      - css
       - js
       - manifest.json
-      - you_liked_it.png
+      - icon.png
     expire_in: 30 days
