@@ -1,18 +1,22 @@
-function log(msg) {
-    console.log('[YouLikedIt]', msg)
-}
-
 // Define a function to handle URL changes
 const regex = /^https?:\/\/www\.youtube\.com\/watch\?v=/;
+
+function log(msg, ...args) {
+    console.log('[YouLikedIt]', msg, ...args)
+}
+
 function handleUrlChange() {
-    // Update the current URL
-    if (regex.test(currentUrl)) {
-        // Reconnect the observer
-        log('url correct');
-        observeLikeButton();
-    } else {
-        log('url incorrect');
+    currentUrl = window.location.href;
+    if (currentUrl.includes('&list=')) {
+        log('Ignore reason: playlist/mix')
+        return false;
     }
+    if (!regex.test(currentUrl)) {
+        log('URL is invalid');
+        return false;
+    }
+    observeLikeButton();
+    return true;
 }
 
 // Define the mutation handler function
@@ -23,14 +27,7 @@ function handleUrlMutations(mutationsList, observer) {
                 if (currentUrl === window.location.href) {
                     return false;
                 }
-                currentUrl = window.location.href;
-                if (currentUrl.includes('&list=')) {
-                    log('Ignoring reason: playlist/mix')
-                    return false;
-                }
-                log('URL changed:', currentUrl);
-                handleUrlChange();
-                return true; // Break out of both some loops
+                return handleUrlChange();
             }
         });
     });
@@ -54,10 +51,10 @@ function createNotification(message, color) {
 
 function clickLike(like_button) {
     if (like_button.title !== 'I like this') {
-        log('already liked');
+        log('Video is already LIKED');
         createNotification('ALREADY LIKED', '#cc0000');
     } else {
-        log('clicking like click');
+        log('Clicking LIKE');
         like_button.click();
         createNotification('LIKED', '#33cc33');
     }
@@ -69,7 +66,7 @@ function handlePageMutations(mutationsList, like_button_observer) {
         return Array.from(mutation.addedNodes).some(node => {
             if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BUTTON' && node.title === 'I like this') {
                 // Once the target button appears, call the clickLike function
-                log('found button');
+                log('Found LIKE button (3s delay...)');
                 setTimeout(() => {
                     // Once the delay is over, call the clickLike function
                     clickLike(node);
@@ -84,7 +81,7 @@ function handlePageMutations(mutationsList, like_button_observer) {
 
 // Define a function to reconnect the observer when the URL changes
 function observeLikeButton() {
-    log('observing');
+    log('Waiting for LIKE button');
     like_button_observer.disconnect();
     like_button_observer.observe(document.body, { childList: true, subtree: true });
 }
@@ -92,7 +89,7 @@ function observeLikeButton() {
 // Define the current URL when the observer is instantiated
 let currentUrl = "";
 
-// Observe url changes when navigating youtube
+// Observer for url changes when navigating youtube
 let url_observer = new MutationObserver(handleUrlMutations);
 // Observer for detecting like button appearing
 let like_button_observer = new MutationObserver(handlePageMutations);
