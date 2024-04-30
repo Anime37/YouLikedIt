@@ -2,7 +2,7 @@ build:
   stage: build
   script: echo "Zipping up files..."
   artifacts:
-    name: "you_like_it"
+    name: "YouLikedIt"
     paths:
       - css
       - js

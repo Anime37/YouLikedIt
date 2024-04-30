@@ -1,3 +1,7 @@
+function log(msg) {
+    console.log('[YouLikedIt]', msg)
+}
+
 // Define a function to handle URL changes
 const regex = /^https?:\/\/www\.youtube\.com\/watch\?v=/;
 function handleUrlChange() {
@@ -5,10 +9,10 @@ function handleUrlChange() {
     currentUrl = window.location.href;
     if (regex.test(currentUrl)) {
         // Reconnect the observer
-        console.log('url correct');
+        log('url correct');
         observeLikeButton();
     } else {
-        console.log('url incorrect');
+        log('url incorrect');
     }
 }
 
@@ -20,7 +24,7 @@ function handleUrlMutations(mutationsList, observer) {
                 if (currentUrl === window.location.href) {
                     return false;
                 }
-                console.log('URL changed:', node.href);
+                log('URL changed:', currentUrl);
                 handleUrlChange();
                 return true; // Break out of both some loops
             }
@@ -46,13 +50,13 @@ function createNotification(message, color) {
 
 function clickLike(like_button) {
     if (like_button.title !== 'I like this') {
-        console.log('already liked');
+        log('already liked');
         createNotification('ALREADY LIKED', '#cc0000');
-        return;
+    } else {
+        log('clicking like click');
+        like_button.click();
+        createNotification('LIKED', '#33cc33');
     }
-    console.log('clicking like click');
-    like_button.click();
-    createNotification('LIKED', '#33cc33');
 }
 
 // Define the mutation handler function
@@ -61,7 +65,7 @@ function handlePageMutations(mutationsList, like_button_observer) {
         return Array.from(mutation.addedNodes).some(node => {
             if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BUTTON' && node.title === 'I like this') {
                 // Once the target button appears, call the clickLike function
-                console.log('found button');
+                log('found button');
                 setTimeout(() => {
                     // Once the delay is over, call the clickLike function
                     clickLike(node);
@@ -76,7 +80,7 @@ function handlePageMutations(mutationsList, like_button_observer) {
 
 // Define a function to reconnect the observer when the URL changes
 function observeLikeButton() {
-    console.log('observing');
+    log('observing');
     like_button_observer.disconnect();
     like_button_observer.observe(document.body, { childList: true, subtree: true });
 }
@@ -92,4 +96,4 @@ let like_button_observer = new MutationObserver(handlePageMutations);
 // Start observing for youtube url change
 url_observer.observe(document.body, { childList: true, subtree: true });
 
-console.log('injected content.js')
+log('injected content.js')
