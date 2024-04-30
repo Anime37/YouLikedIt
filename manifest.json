@@ -8,9 +8,6 @@
             "matches": [
                 "*://www.youtube.com/*"
             ],
-            "exclude_globs": [
-                "*://www.youtube.com/watch*list=*"
-            ],
             "js": [
                 "js/content.js"
             ],

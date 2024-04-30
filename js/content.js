@@ -6,7 +6,6 @@ function log(msg) {
 const regex = /^https?:\/\/www\.youtube\.com\/watch\?v=/;
 function handleUrlChange() {
     // Update the current URL
-    currentUrl = window.location.href;
     if (regex.test(currentUrl)) {
         // Reconnect the observer
         log('url correct');
@@ -22,6 +21,11 @@ function handleUrlMutations(mutationsList, observer) {
         return Array.from(mutation.addedNodes).some(node => {
             if (node.nodeName === 'A' && node.href.includes('youtube.com')) {
                 if (currentUrl === window.location.href) {
+                    return false;
+                }
+                currentUrl = window.location.href;
+                if (currentUrl.includes('&list=')) {
+                    log('Ignoring reason: playlist/mix')
                     return false;
                 }
                 log('URL changed:', currentUrl);
