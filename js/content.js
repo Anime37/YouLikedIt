@@ -64,12 +64,14 @@ function clickLike(like_button) {
 function handlePageMutations(mutationsList, like_button_observer) {
     mutationsList.some(mutation => {
         return Array.from(mutation.addedNodes).some(node => {
-            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BUTTON' && node.title === 'I like this') {
+            if (node.tagName == 'LIKE-BUTTON-VIEW-MODEL') {
+                // go down the children tree to get the actual like button object
+                like_button = node.firstChild.firstChild.firstChild;
                 // Once the target button appears, call the clickLike function
                 log('Found LIKE button (3s delay...)');
                 setTimeout(() => {
                     // Once the delay is over, call the clickLike function
-                    clickLike(node);
+                    clickLike(like_button);
                 }, 3000); // 3 seconds delay
                 // Disconnect the observer as the target button is found
                 like_button_observer.disconnect();
