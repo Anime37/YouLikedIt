@@ -1,6 +1,10 @@
 // Define a function to handle URL changes
 const regex = /^https?:\/\/www\.youtube\.com\/watch\?v=/;
 
+// need to be capitalized
+const like_dislike_buttons_tag_name = 'YT-SMARTIMATION';
+const like_button_tag_name = 'LIKE-BUTTON-VIEW-MODEL';
+
 function log(msg, ...args) {
     console.log('[YouLikedIt]', msg, ...args)
 }
@@ -64,18 +68,25 @@ function clickLike(like_button) {
 function handlePageMutations(mutationsList, like_button_observer) {
     mutationsList.some(mutation => {
         return Array.from(mutation.addedNodes).some(node => {
-            if (node.tagName == 'LIKE-BUTTON-VIEW-MODEL') {
+            if (node.tagName == like_dislike_buttons_tag_name) {
                 // go down the children tree to get the actual like button object
-                like_button = node.firstChild.firstChild.firstChild;
-                // Once the target button appears, call the clickLike function
-                log('Found LIKE button (3s delay...)');
-                setTimeout(() => {
-                    // Once the delay is over, call the clickLike function
-                    clickLike(like_button);
-                }, 3000); // 3 seconds delay
-                // Disconnect the observer as the target button is found
-                like_button_observer.disconnect();
-                return true; // Break out of both some loops
+                try {
+                    like_button_view_model = node.firstElementChild.firstChild.firstChild;
+                    if (like_button_view_model.tagName == like_button_tag_name) {
+                        like_button = like_button_view_model.firstElementChild.firstElementChild.firstElementChild;
+                        // Once the target button appears, call the clickLike function
+                        log('Found LIKE button (3s delay...)');
+                        setTimeout(() => {
+                            // Once the delay is over, call the clickLike function
+                            clickLike(like_button);
+                        }, 3000); // 3 seconds delay
+                        // Disconnect the observer as the target button is found
+                        like_button_observer.disconnect();
+                        return true; // Break out of both some loops
+                    }
+                } catch {
+                    return false;
+                }
             }
         });
     });
