@@ -9,18 +9,47 @@ function log(msg, ...args) {
     console.log('[YouLikedIt]', msg, ...args)
 }
 
-function handleUrlChange() {
-    currentUrl = window.location.href;
-    if (currentUrl.includes('&list=RD')) {
-        log('Ignore reason: My mix')
-        return false;
+function getStorage() {
+    const options = ['simple', 'playlist', 'mymix'];
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.get(options, (result) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+async function handleUrlChange() {
+    try {
+        currentUrl = window.location.href;
+        if (!regex.test(currentUrl)) {
+            log('URL is invalid');
+            return false;
+        }
+        const result = await getStorage();
+        if (!result['playlist'] && currentUrl.includes('&list=PL')) {
+            log('Ignore reason: Playlist')
+            createNotification('IGNORED (Playlist)', '#8B008B');
+            return false;
+        }
+        if (!result['mymix'] && currentUrl.includes('&list=RD')) {
+            log('Ignore reason: My mix')
+            createNotification('IGNORED (My Mix)', '#8B008B');
+            return false;
+        }
+        if (!result['simple'] && !currentUrl.includes('&list=')) {
+            log('Ignore reason: Simple')
+            createNotification('IGNORED (Simple)', '#8B008B');
+            return false;
+        }
+        observeLikeButton();
+        return true;
+    } catch {
+        return false
     }
-    if (!regex.test(currentUrl)) {
-        log('URL is invalid');
-        return false;
-    }
-    observeLikeButton();
-    return true;
 }
 
 // Define the mutation handler function

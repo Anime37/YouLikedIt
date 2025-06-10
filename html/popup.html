@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Toggle Options</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            width: 200px;
+            background-color: #121212;
+            /* Dark background */
+            color: #eee;
+            /* Light text */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #4caf50;
+            /* Nice green toggle color */
+        }
+    </style>
+</head>
+
+<body>
+    <label>Auto-LIKE videos:</label>
+    <label><input type="checkbox" id="simple">Simple</label>
+    <label><input type="checkbox" id="playlist">Playlist</label>
+    <label><input type="checkbox" id="mymix">My mix</label>
+    <script src="../js/popup.js"></script>
+</body>
+
+</html>
