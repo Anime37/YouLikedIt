@@ -11,8 +11,8 @@ function log(msg, ...args) {
 
 function handleUrlChange() {
     currentUrl = window.location.href;
-    if (currentUrl.includes('&list=')) {
-        log('Ignore reason: playlist/mix')
+    if (currentUrl.includes('&list=RD')) {
+        log('Ignore reason: My mix')
         return false;
     }
     if (!regex.test(currentUrl)) {
