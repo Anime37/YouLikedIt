@@ -1,4 +1,4 @@
-const options = ['simple', 'playlist', 'mymix'];
+const options = ['simple', 'playlist', 'queue', 'mymix'];
 
 function saveOptions() {
     let state = {};

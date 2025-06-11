@@ -2,6 +2,7 @@ chrome.runtime.onInstalled.addListener(() => {
     const defaultConfig = {
         simple: true,
         playlist: true,
+        queue: true,
         mymix: false
     };
 

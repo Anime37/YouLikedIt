@@ -10,7 +10,7 @@ function log(msg, ...args) {
 }
 
 function getStorage() {
-    const options = ['simple', 'playlist', 'mymix'];
+    const options = ['simple', 'playlist', 'queue', 'mymix'];
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get(options, (result) => {
             if (chrome.runtime.lastError) {
@@ -30,6 +30,7 @@ async function handleUrlChange() {
             return false;
         }
         const result = await getStorage();
+        /* bad lazy programming goes brrrrrrrrrr */
         if (!result['playlist'] && currentUrl.includes('&list=PL')) {
             log('Ignore reason: Playlist')
             createNotification('IGNORED (Playlist)', '#8B008B');
@@ -38,6 +39,11 @@ async function handleUrlChange() {
         if (!result['mymix'] && currentUrl.includes('&list=RD')) {
             log('Ignore reason: My mix')
             createNotification('IGNORED (My Mix)', '#8B008B');
+            return false;
+        }
+        if (!result['queue'] && currentUrl.includes('&list=TL')) {
+            log('Ignore reason: Queue')
+            createNotification('IGNORED (Queue)', '#8B008B');
             return false;
         }
         if (!result['simple'] && !currentUrl.includes('&list=')) {
