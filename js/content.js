@@ -4,6 +4,7 @@ const regex = /^https?:\/\/www\.youtube\.com\/watch\?v=/;
 // need to be capitalized
 const like_dislike_buttons_tag_name = 'YT-SMARTIMATION';
 const like_button_tag_name = 'LIKE-BUTTON-VIEW-MODEL';
+let isObserverRunning = false;
 
 function log(msg, ...args) {
     console.log('[YouLikedIt]', msg, ...args)
@@ -88,15 +89,39 @@ function createNotification(message, color) {
     }, 3000); // Display duration
 }
 
-function clickLike(like_button) {
-    if (like_button.title !== 'I like this') {
-        log('Video is already LIKED');
-        createNotification('ALREADY LIKED', '#cc0000');
-    } else {
-        log('Clicking LIKE');
-        like_button.click();
-        createNotification('LIKED', '#33cc33');
+function clickLike() {
+    try {
+        const node = document.getElementsByTagName(like_button_tag_name)[0];
+        like_button = node.firstChild.firstChild.firstChild;
+        if (like_button.title !== 'I like this') {
+            log('Video is already LIKED');
+            createNotification('ALREADY LIKED', '#cc0000');
+        } else {
+            log('Clicking LIKE');
+            like_button.click();
+            createNotification('LIKED', '#33cc33');
+        }
+    } catch {
+        log('LIKE button not found');
     }
+}
+
+function clickLikeDelayed() {
+    log('Found LIKE button (3s delay...)');
+    setTimeout(() => {
+        // Once the delay is over, call the clickLike function
+        clickLike();
+    }, 3000); // 3 seconds delay
+}
+
+function clickLikeOnObserverTmo() {
+    setTimeout(() => {
+        if (isObserverRunning) {
+            like_button_observer.disconnect();
+            isObserverRunning = false;
+            clickLike()
+        }
+    }, 3000); // 3 seconds delay
 }
 
 // Define the mutation handler function
@@ -110,13 +135,10 @@ function handlePageMutations(mutationsList, like_button_observer) {
                     if (like_button_view_model.tagName == like_button_tag_name) {
                         like_button = like_button_view_model.firstElementChild.firstElementChild.firstElementChild;
                         // Once the target button appears, call the clickLike function
-                        log('Found LIKE button (3s delay...)');
-                        setTimeout(() => {
-                            // Once the delay is over, call the clickLike function
-                            clickLike(like_button);
-                        }, 3000); // 3 seconds delay
+                        clickLikeDelayed();
                         // Disconnect the observer as the target button is found
                         like_button_observer.disconnect();
+                        isObserverRunning = false;
                         return true; // Break out of both some loops
                     }
                 } catch {
@@ -129,9 +151,11 @@ function handlePageMutations(mutationsList, like_button_observer) {
 
 // Define a function to reconnect the observer when the URL changes
 function observeLikeButton() {
-    log('Waiting for LIKE button');
     like_button_observer.disconnect();
+    log('Waiting for LIKE button');
     like_button_observer.observe(document.body, { childList: true, subtree: true });
+    isObserverRunning = true;
+    clickLikeOnObserverTmo();
 }
 
 // Define the current URL when the observer is instantiated
