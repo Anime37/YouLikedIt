@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - '*'  # Trigger on any tag push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      build_id: ${{ steps.set-output.outputs.build_id }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Zip files
+        run: |
+          echo "Zipping up files..."
+          zip -r youlikedit-${{ github.ref_name }}.zip css html js manifest.json icon.png
+
+      - name: Save build ID
+        id: set-output
+        run: |
+          echo "BUILD_JOB_ID=${{ github.run_id }}" >> build.env
+          echo "build_id=${{ github.run_id }}" >> $GITHUB_OUTPUT
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: youlikedit-${{ github.ref_name }}
+          path: |
+            youlikedit-${{ github.ref_name }}.zip
+            build.env
+          retention-days: 0  # never expires
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: youlikedit-${{ github.ref_name }}
+
+      - name: Extract build ID
+        run: |
+          source build.env
+          echo "Releasing (BUILD_JOB_ID=$BUILD_JOB_ID)..."
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: YouLikedIt ${{ github.ref_name }}
+          body: ${{ github.ref_name }}
+          files: youlikedit-${{ github.ref_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
