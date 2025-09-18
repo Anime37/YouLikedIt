@@ -93,7 +93,9 @@ function clickLike() {
     try {
         const node = document.getElementsByTagName(like_button_tag_name)[0];
         like_button = node.firstChild.firstChild.firstChild;
-        if (like_button.title !== 'I like this') {
+        is_like_button_pressed = like_button.getAttribute('aria-pressed');
+        log('Like button state: ' + is_like_button_pressed);
+        if (is_like_button_pressed == 'true') {
             log('Video is already LIKED');
             createNotification('ALREADY LIKED', '#cc0000');
         } else {
