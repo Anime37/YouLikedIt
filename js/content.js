@@ -91,13 +91,15 @@ function createNotification(message, color) {
 
 function clickLike() {
     try {
-        const node = document.getElementsByTagName(like_button_tag_name)[0];
-        like_button = node.firstChild.firstChild.firstChild;
+        like_button = document.querySelector("#top-level-buttons-computed > segmented-like-dislike-button-view-model > yt-smartimation > div > div > like-button-view-model > toggle-button-view-model > button-view-model > button");
         is_like_button_pressed = like_button.getAttribute('aria-pressed');
         log('Like button state: ' + is_like_button_pressed);
         if (is_like_button_pressed == 'true') {
+            red = '#cc0000';
             log('Video is already LIKED');
-            createNotification('ALREADY LIKED', '#cc0000');
+            log(like_button);
+            like_button.style.backgroundColor = red;
+            createNotification('ALREADY LIKED', red);
         } else {
             log('Clicking LIKE');
             like_button.click();

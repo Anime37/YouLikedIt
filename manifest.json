@@ -1,7 +1,7 @@
 {
     "name": "YouLikedIt",
     "description": "Automatically LIKE every video you watch.",
-    "version": "0.8.2",
+    "version": "0.8.3",
     "manifest_version": 3,
     "content_scripts": [
         {
