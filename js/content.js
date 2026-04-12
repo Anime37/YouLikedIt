@@ -13,9 +13,9 @@ function log(msg, ...args) {
 function getStorage() {
     const options = ['simple', 'playlist', 'queue', 'mymix'];
     return new Promise((resolve, reject) => {
-        chrome.storage.sync.get(options, (result) => {
-            if (chrome.runtime.lastError) {
-                reject(chrome.runtime.lastError);
+        browser.storage.sync.get(options, (result) => {
+            if (browser.runtime.lastError) {
+                reject(browser.runtime.lastError);
             } else {
                 resolve(result);
             }

@@ -3,6 +3,14 @@
     "description": "Automatically LIKE every video you watch.",
     "version": "0.8.3",
     "manifest_version": 3,
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "{c7a48f19-c5dd-40c6-9ba1-d2162d354e7e}",
+            "data_collection_permissions": {
+                "required": ["none"]
+            }
+        }
+    },
     "content_scripts": [
         {
             "matches": [
@@ -25,7 +33,9 @@
         "default_popup": "html/popup.html"
     },
     "background": {
-        "service_worker": "js/background.js"
+        "scripts": [
+            "js/background.js"
+        ]
     },
     "permissions": [
         "storage"

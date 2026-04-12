@@ -1,4 +1,4 @@
-chrome.runtime.onInstalled.addListener(() => {
+browser.runtime.onInstalled.addListener(() => {
     const defaultConfig = {
         simple: true,
         playlist: true,
@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(() => {
         mymix: false
     };
 
-    chrome.storage.sync.set(defaultConfig, () => {
+    browser.storage.sync.set(defaultConfig, () => {
         console.log("Initial config set:", defaultConfig);
     });
 });

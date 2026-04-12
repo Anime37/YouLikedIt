@@ -5,11 +5,11 @@ function saveOptions() {
     options.forEach(opt => {
         state[opt] = document.getElementById(opt).checked;
     });
-    chrome.storage.sync.set(state);
+    browser.storage.sync.set(state);
 }
 
 function loadOptions() {
-    chrome.storage.sync.get(options, (result) => {
+    browser.storage.sync.get(options, (result) => {
         options.forEach(opt => {
             document.getElementById(opt).checked = result[opt] || false;
         });
